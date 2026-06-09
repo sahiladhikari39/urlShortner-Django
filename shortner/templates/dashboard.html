@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- CREATE SHORT URL -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-7">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <h4 class="mb-3 fw-bold">Shorten a New URL</h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Shorten
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- URL LIST -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">Your Short URLs</h4>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Short URL</th>
+                        <th>Original URL</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for url in urls %}
+                    <tr>
+
+                        <td>
+                            <a class="text-decoration-none"
+                               href="{% url 'redirect_url' url.short_key %}"
+                               target="_blank">
+                                /s/{{ url.short_key }}
+                            </a>
+                        </td>
+
+                        <td>
+                            <a class="text-muted text-decoration-none"
+                               href="{{ url.original_url }}"
+                               target="_blank">
+                                {{ url.original_url|truncatechars:50 }}
+                            </a>
+                        </td>
+
+                        <td class="text-muted">
+                            {{ url.created_at|date:"Y-m-d" }}
+                        </td>
+
+                        <td class="d-flex gap-2">
+
+                            <a href="{% url 'edit_url' url.pk %}"
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+
+                            <a href="{% url 'delete_url' url.pk %}"
+                               class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No URLs yet. Create one above!
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

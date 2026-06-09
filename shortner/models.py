@@ -12,7 +12,7 @@ class ShortURL(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     original_url = models.URLField()
     short_key = models.CharField(max_length=20, unique=True)
-    created_at   = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     
     def save(self, *args, **kwargs):
